@@ -2,7 +2,7 @@ import array, math, time, board, audiobusio, digitalio, audiocore
 import math
 
 SAMPLE_RATE = 44100  # Default sample rate for audio DAC
-AMPLITUDE = 0.665  # Calibrate to max amp setting = nominal voltage (e.g. 100 V)
+AMPLITUDE = 0.72  # Calibrate to max amp setting = nominal voltage (e.g. 100 V)
 FREQ_LOW = 100.0 / 3.0  # 33.333... Hz
 FREQ_HIGH = 125.0  # 125 Hz
 
@@ -46,7 +46,9 @@ def stereo_wave(freq_left, freq_right):
     for i in range(total_length):
         stereo[2 * i] = left[i]
         stereo[2 * i + 1] = right[i]
-    stereo_wave_sample = audiocore.RawSample(stereo, sample_rate=SAMPLE_RATE)
+    stereo_wave_sample = audiocore.RawSample(
+        stereo, channel_count=2, sample_rate=SAMPLE_RATE
+    )
     return stereo_wave_sample
 
 
@@ -61,6 +63,7 @@ left_high = False
 right_high = False
 
 wave = stereo_wave(FREQ_LOW, FREQ_LOW)
+# wave = stereo_wave(FREQ_HIGH, FREQ_HIGH)
 audio.play(wave, loop=True)
 
 print("Stereo sine started")
